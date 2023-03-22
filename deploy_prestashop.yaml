@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: 4kube-dev
+  name: deploymentprestashop
+  labels:
+    app: prestashop
+spec:
+  selector:
+    matchLabels:
+      app: prestashop
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: prestashop
+    spec:
+      containers:
+        - name: prestashop
+          image: prestashop/prestashop:latest
+          ports:
+            - containerPort: 80
+              name: prestashop
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: DB_USER
+            - name: DB_PASSWD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: DB_PASSWD
+            - name: PRESTASHOP_MAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: PRESTASHOP_MAIL
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: DB_NAME
+            - name: PRESTASHOP_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: PRESTASHOP_HOST
+            - name: ALLOW_EMPTY_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: ALLOW_EMPTY_PASSWORD
+          volumeMounts:
+            - name: pv-prestashop
+              mountPath: /var/www/html
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+            requests:
+              cpu: "0.5"
+              memory: "256Mi"
+      volumes:  
+        - name: pv-prestashop
+          persistentVolumeClaim:
+            claimName: pvc-prestashop

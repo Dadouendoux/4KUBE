@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestashop
+  namespace: 4kube-dev
+spec:
+  selector:
+    app: prestashop
+  type: NodePort
+  sessionAffinity: None
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+  - name: prestashop
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+    # you can specify a value in the `spec.ports[*].nodePort` field.
+    #nodePort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: 4kube-dev
+spec:
+  selector:
+    app: mysql
+  type: NodePort
+  sessionAffinity: None
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+    # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+    # you can specify a value in the `spec.ports[*].nodePort` field.
+    #nodePort: 3306

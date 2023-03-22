@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+  namespace: 4kube-dev
+data:
+  PRESTASHOP_MAIL: david.chelian@supinfo.com
+  DB_NAME: SupNet
+  PRESTASHOP_HOST: 192.168.48.141
+  ALLOW_EMPTY_PASSWORD: 'yes'
+  MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'

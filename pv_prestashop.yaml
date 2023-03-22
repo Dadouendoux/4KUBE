@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-prestashop
+  namespace: 4kube-dev
+  labels:
+    app: prestashop
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+   - ReadWriteMany
+   - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/data/prestashop
